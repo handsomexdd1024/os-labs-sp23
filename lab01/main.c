@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
-int main() {
-    printf("Hello, World!\n");
-    return 0;
+int main(int argc, char** argv) {
+    pid_t pid;
 }

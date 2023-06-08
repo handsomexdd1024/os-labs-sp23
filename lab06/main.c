@@ -58,6 +58,7 @@ int main(){
             }
             case 6: {
                 check_file_status();
+                break;
             }
             case 7:{
                 close_file();
@@ -75,6 +76,7 @@ void create_open_file(){
     fd = open(filenames,O_RDWR,0666);
     if(fd>=0){
         printf("%s exists, successfully opened file\n",filenames);
+        printf("file descriptor: %d\n",fd);
         argv[2]=(char*)malloc(50);
         strcpy(argv[2],filenames);
         openstate=1;
@@ -87,6 +89,7 @@ void create_open_file(){
         }
         else {
             printf("%s create success\n",filenames);
+            printf("file descriptor: %d\n",fd);
             openstate=1;
         }
     }
@@ -101,6 +104,8 @@ void write_file(){
     char buff[1024];
     scanf("%s",buff);
     ssize_t status= write(fd,buff,strlen(buff)+1);
+    fflush(fdopen(fd,"w"));
+    sync();
     if(status==-1)printf("write failed\n");
     else printf("write success\n");
 }
@@ -114,8 +119,12 @@ void read_file(){
     char buff[1024];
     lseek(fd, 0, SEEK_SET);
     ssize_t status=read(fd,buff,1024);
-    if(status==-1)printf("read failed\n");
-    else printf("content:%s\n",buff);
+    if(status==-1)printf("rbufferead failed\n");
+    else {
+        printf("successfully read %ld bytes\n", status);
+        printf("content of file:\n");
+        printf("%s\n",buff);
+    }
 }
 
 void change_file_mod(){
